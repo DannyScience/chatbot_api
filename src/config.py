@@ -1,7 +1,7 @@
 import os
 
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 GPT_KEY = os.environ.get("GPT_KEY")
 DB_HOST = os.environ.get("DB_HOST")

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from chatbot.chatbot import execute_promt
 from fastapi_users import FastAPIUsers, fastapi_users
@@ -41,8 +41,20 @@ app.add_middleware(
                    "Authorization"],
 )
 
+current_user = fastapi_users.current_user()
+
+
+@app.get("/protected-route")
+def protected_route(user: User = Depends(current_user)):
+    return f"Hello, {user.username}"
+
+
+@app.get("/unprotected-route")
+def unprotected_route():
+    return f"Hello, anonym"
+
 
 @app.get("/send_promt")
-def send_promt(promt: str):
+def send_promt(promt: str, user: User = Depends(current_user)):
     response = execute_promt(promt)
     return {"status": 200, "data": response}
